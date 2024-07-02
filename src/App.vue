@@ -1,47 +1,64 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import {reactive} from 'vue'
+import Cabecalho from './components/Cabecalho.vue'
+import Formulario from './components/Formulario.vue'
+import Operacao from './components/Operacao.vue'
+
+const estado = reactive({
+  num1: 0,
+  num2: 0,
+  resultado: '',
+  operacao: 'soma',
+})
+
+const getSoma = () => {
+  estado.resultado = parseFloat(estado.num1) + parseFloat(estado.num2)
+  return estado.resultado
+}
+
+const getSubtracao = () => {
+  estado.resultado = parseFloat(estado.num1) - parseFloat(estado.num2)
+  return estado.resultado
+}
+
+const getMultiplicacao = () => {
+  estado.resultado = parseFloat(estado.num1) * parseFloat(estado.num2)
+  return estado.resultado
+}
+
+const getDivisao = () => {
+  estado.resultado = parseFloat(estado.num1) / parseFloat(estado.num2)
+  return estado.resultado
+}
+
+const getOperacao = () => {
+  const { operacao } = estado
+
+  switch (operacao) {
+    case 'soma':
+      return getSoma()
+    case 'subtracao':
+      return getSubtracao()
+    case 'multiplicacao':
+      return getMultiplicacao()
+    case 'divisao':
+      return getDivisao()
+    default:
+      return estado.resultado
+  }
+}
+
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div class="container bg-light rounded-3">
+    <Cabecalho />
+    <Formulario :num1="evento => estado.num1 = evento.target.value" :num2="evento => estado.num2 = evento.target.value"/>
+    <Operacao :resultado = "getOperacao()" :operacao="evento => estado.operacao = evento.target.value"/>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+  </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
 </style>
